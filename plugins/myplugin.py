@@ -20,14 +20,14 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
         # you can add additional cmd line options here.
         optlist = [
             optparse.make_option("--my-plugin-help",
-                                 dest="my-plugin_help",
+                                 dest="my_plugin_help",
                                  action="store_true",
                                  help="Print help on my-plugin symbols and exit"),
             optparse.make_option("--my-plugin-tree-path",
-                                 dest="my-plugin_tree_path",
+                                 dest="my_plugin_tree_path",
                                  help="Subtree to print"),
             optparse.make_option("--my-plugin-tree-no-expand-uses",
-                                 dest="my-plugin_tree_no_expand_uses",
+                                 dest="my_plugin_tree_no_expand_uses",
                                  action="store_false",
                                  default=False,
                                  help="Do not expand uses of groupings"),
@@ -36,7 +36,7 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
         g.add_options(optlist)
     
     def setup_ctx(self, ctx):
-        if ctx.opts.my-plugin_help:
+        if ctx.opts.my_plugin_help:
             print_help()
             sys.exit(0)
    
@@ -82,7 +82,7 @@ def emit_tree(ctx, modules, fd, depth, llen, path):
             if not printed_header:
                 print_header()
         print_children(chs, module, fd, '', chpath, 'data', depth, llen,
-                           ctx.opts.my-plugin_tree_no_expand_uses,
+                           ctx.opts.my_plugin_tree_no_expand_uses,
                            prefix_with_modname=ctx.opts.modname_prefix)
 
 def print_children(i_children, module, fd, prefix, path, mode, depth,

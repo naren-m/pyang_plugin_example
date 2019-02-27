@@ -54,8 +54,7 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
                 path = path[1:]
         else:
             path = None
-        emit_tree(ctx, modules, fd,
-                  ctx.opts.tree_line_length, path)
+        emit_tree(ctx, modules, fd, ctx.opts.tree_line_length, path)
 
 
 class Metric:
@@ -107,14 +106,9 @@ def emit_tree(ctx, modules, fd, llen, path):
 
         print("chpath", chpath)
 
-        print_children(
-            chs,
-            module,
-            fd,
-            chpath,
-            'data',
-            llen,
-            ctx.opts.my_plugin_tree_no_expand_uses)
+        print_children(chs, module, fd, chpath, 'data', llen,
+                       ctx.opts.my_plugin_tree_no_expand_uses)
+
 
 # metric
 def print_children(i_children,
@@ -149,24 +143,10 @@ def print_children(i_children,
                 and len(ch.i_children) == 0):
             continue
         print_node(
-            ch,
-            module,
-            fd,
-            path,
-            llen,
-            no_expand_uses,
-            width,
-            metric=metric)
+            ch, module, fd, path, llen, no_expand_uses, width, metric=metric)
 
 
-def print_node(s,
-               module,
-               fd,
-               path,
-               llen,
-               no_expand_uses,
-               width,
-               metric=None):
+def print_node(s, module, fd, path, llen, no_expand_uses, width, metric=None):
     if s.i_module.i_modulename == module.i_modulename:
         name = s.arg
     else:
@@ -192,23 +172,12 @@ def print_node(s,
             path = path[1:]
         if s.keyword in ['container', 'list']:
             print_children(
-                chs,
-                module,
-                fd,
-                path,
-                llen,
-                no_expand_uses,
-                metric=m)
+                chs, module, fd, path, llen, no_expand_uses, metric=m)
         else:
             print_children(
-                chs,
-                module,
-                fd,
-                path,
-                llen,
-                no_expand_uses,
-                metric=metric)
+                chs, module, fd, path, llen, no_expand_uses, metric=metric)
     print('In Print node', metric)
+
 
 def unexpand_uses(i_children):
     res = []

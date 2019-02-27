@@ -218,10 +218,9 @@ def print_node(s,
         else:
             metric.append(m)
     elif s.keyword == 'leaf':
-        metric.append(Metric(name))
+        metric.append(m)
 
     print(s.keyword, name)
-    print('In Print node', metric)
 
     if hasattr(s, 'i_children') and s.keyword != 'uses':
         if depth is not None:
@@ -240,8 +239,8 @@ def print_node(s,
                 llen,
                 no_expand_uses,
                 prefix_with_modname=prefix_with_modname,
-                metric=metric)
-
+                metric=m)
+    print('In Print node', metric)
 
 def unexpand_uses(i_children):
     res = []

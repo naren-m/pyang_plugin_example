@@ -109,7 +109,6 @@ def emit_tree(ctx, modules, fd, llen, path):
                        ctx.opts.my_plugin_tree_no_expand_uses)
 
 
-# metric
 def print_children(i_children,
                    module,
                    fd,

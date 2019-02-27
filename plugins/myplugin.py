@@ -58,22 +58,6 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
                   ctx.opts.tree_line_length, path)
 
 
-class Metrics:
-    def __init__(self, basepath):
-        self.basepath = basepath
-        self.spec = {"fields": list()}
-
-    def append(self, data):
-        self.spec['fields'].append(data)
-
-    def __repr__(self):
-        return self.basepath + ' ' + str(self.spec)
-
-    def print(self):
-        print(self.basepath)
-        for f in self.spec['fields']:
-            print('    ', f)
-
 class Metric:
     def __init__(self, name):
         self.name = name
@@ -110,7 +94,6 @@ class Metric:
 def emit_tree(ctx, modules, fd, llen, path):
     print('Emitting tree dummy')
     pathstr = ''
-    metrics = Metrics(basepath=pathstr)
     for module in modules:
         chs = [
             ch for ch in module.i_children
@@ -132,11 +115,7 @@ def emit_tree(ctx, modules, fd, llen, path):
             chpath,
             'data',
             llen,
-            ctx.opts.my_plugin_tree_no_expand_uses,
-            metrics=metrics)
-        print('--'*20)
-        print(metrics)
-        print('--'*20)
+            ctx.opts.my_plugin_tree_no_expand_uses)
 
 # metric
 def print_children(i_children,
@@ -146,7 +125,6 @@ def print_children(i_children,
                    llen,
                    no_expand_uses=False,
                    width=0,
-                   metrics=None,
                    metric=None):
     def get_width(w, chs):
         for ch in chs:
@@ -197,7 +175,8 @@ def print_node(s,
 
     m = Metric(name)
 
-    if s.keyword == 'container':
+    # if s.keyword == 'container':
+    if s.keyword in ['container', 'list']:
         if metric is None:
             metric = m
         else:
@@ -212,7 +191,7 @@ def print_node(s,
         if path is not None and len(path) > 0:
             chs = [ch for ch in chs if ch.arg == path[0]]
             path = path[1:]
-        if s.keyword == 'container':    
+        if s.keyword in ['container', 'list']:
             print_children(
                 chs,
                 module,
@@ -221,7 +200,7 @@ def print_node(s,
                 llen,
                 no_expand_uses,
                 metric=m)
-        else:    
+        else:
             print_children(
                 chs,
                 module,

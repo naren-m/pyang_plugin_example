@@ -8,6 +8,38 @@ from pyang import statements
 def pyang_plugin_init():
     plugin.register_plugin(MyPluginPyangPlugin())
 
+class Metric:
+    def __init__(self, name):
+        self.name = name
+        self.fields = list()
+
+    def append(self, metric):
+        if metric not in self.fields:
+            self.fields.append(metric)
+
+    def __eq__(self, other):
+        if other is None:
+            return False
+        return (self.name == other.name)
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __repr__(self):
+        return "{'name': %s, 'fields': %s}" % (self.name, str(self.fields))
+
+    def __contains__(self, metric):
+        for m in self.fields:
+            if m == metric:
+                return True
+
+        return False
+
+    def print(self):
+        print(self.name)
+        for f in self.fields:
+            print('    ', f)
+
 
 class MyPluginPyangPlugin(plugin.PyangPlugin):
     def __init__(self):
@@ -56,38 +88,6 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
             path = None
         emit_tree(ctx, modules, fd, ctx.opts.tree_line_length, path)
 
-
-class Metric:
-    def __init__(self, name):
-        self.name = name
-        self.fields = list()
-
-    def append(self, metric):
-        if metric not in self.fields:
-            self.fields.append(metric)
-
-    def __eq__(self, other):
-        if other is None:
-            return False
-        return (self.name == other.name)
-
-    def __ne__(self, other):
-        return not (self == other)
-
-    def __repr__(self):
-        return "{'name': %s, 'fields': %s}" % (self.name, str(self.fields))
-
-    def __contains__(self, metric):
-        for m in self.fields:
-            if m == metric:
-                return True
-
-        return False
-
-    def print(self):
-        print(self.name)
-        for f in self.fields:
-            print('    ', f)
 
 
 def emit_tree(ctx, modules, fd, llen, path):

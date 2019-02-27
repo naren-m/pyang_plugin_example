@@ -88,8 +88,6 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
             path = None
         emit_tree(ctx, modules, fd, ctx.opts.tree_line_length, path)
 
-
-
 def emit_tree(ctx, modules, fd, llen, path):
     for module in modules:
         chs = [

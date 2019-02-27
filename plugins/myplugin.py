@@ -54,7 +54,7 @@ class MyPluginPyangPlugin(plugin.PyangPlugin):
                 path = path[1:]
         else:
             path = None
-        emit_tree(ctx, modules, fd, ctx.opts.tree_depth,
+        emit_tree(ctx, modules, fd,
                   ctx.opts.tree_line_length, path)
 
 
@@ -107,7 +107,7 @@ class Metric:
             print('    ', f)
 
 
-def emit_tree(ctx, modules, fd, depth, llen, path):
+def emit_tree(ctx, modules, fd, llen, path):
     print('Emitting tree dummy')
     pathstr = ''
     metrics = Metrics(basepath=pathstr)
@@ -131,10 +131,8 @@ def emit_tree(ctx, modules, fd, depth, llen, path):
             fd,
             chpath,
             'data',
-            depth,
             llen,
             ctx.opts.my_plugin_tree_no_expand_uses,
-            prefix_with_modname=ctx.opts.modname_prefix,
             metrics=metrics)
         print('--'*20)
         print(metrics)
@@ -146,17 +144,11 @@ def print_children(i_children,
                    fd,
                    path,
                    mode,
-                   depth,
                    llen,
                    no_expand_uses=False,
                    width=0,
-                   prefix_with_modname=False,
                    metrics=None,
                    metric=None):
-    if depth == 0:
-        if i_children: fd.write(' depth 0 case    ...\n')
-        return
-
     def get_width(w, chs):
         for ch in chs:
             if ch.keyword in ['choice', 'case']:
@@ -186,11 +178,9 @@ def print_children(i_children,
             fd,
             path,
             mode,
-            depth,
             llen,
             no_expand_uses,
             width,
-            prefix_with_modname=prefix_with_modname,
             metric=metric)
 
 
@@ -199,11 +189,9 @@ def print_node(s,
                fd,
                path,
                mode,
-               depth,
                llen,
                no_expand_uses,
                width,
-               prefix_with_modname=False,
                metric=None):
     if s.i_module.i_modulename == module.i_modulename:
         name = s.arg
@@ -223,8 +211,6 @@ def print_node(s,
     print(s.keyword, name)
 
     if hasattr(s, 'i_children') and s.keyword != 'uses':
-        if depth is not None:
-            depth -= 1
         chs = s.i_children
         if path is not None and len(path) > 0:
             chs = [ch for ch in chs if ch.arg == path[0]]
@@ -235,10 +221,8 @@ def print_node(s,
                 fd,
                 path,
                 mode,
-                depth,
                 llen,
                 no_expand_uses,
-                prefix_with_modname=prefix_with_modname,
                 metric=m)
     print('In Print node', metric)
 

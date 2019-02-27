@@ -118,24 +118,8 @@ def print_children(i_children,
                    no_expand_uses=False,
                    width=0,
                    metric=None):
-    def get_width(w, chs):
-        for ch in chs:
-            if ch.keyword in ['choice', 'case']:
-                nlen = 3 + get_width(0, ch.i_children)
-            else:
-                if ch.i_module.i_modulename == module.i_modulename:
-                    nlen = len(ch.arg)
-                else:
-                    nlen = len(ch.i_module.i_prefix) + 1 + len(ch.arg)
-            if nlen > w:
-                w = nlen
-        return w
-
     if no_expand_uses:
         i_children = unexpand_uses(i_children)
-
-    if width == 0:
-        width = get_width(0, i_children)
 
     for ch in i_children:
         if ((ch.keyword == 'input' or ch.keyword == 'output')

@@ -91,7 +91,6 @@ class Metric:
 
 
 def emit_tree(ctx, modules, fd, llen, path):
-    print('Emitting tree dummy')
     for module in modules:
         chs = [
             ch for ch in module.i_children

@@ -212,7 +212,8 @@ def print_node(s,
         if path is not None and len(path) > 0:
             chs = [ch for ch in chs if ch.arg == path[0]]
             path = path[1:]
-        print_children(
+        if s.keyword == 'container':    
+            print_children(
                 chs,
                 module,
                 fd,
@@ -220,6 +221,15 @@ def print_node(s,
                 llen,
                 no_expand_uses,
                 metric=m)
+        else:    
+            print_children(
+                chs,
+                module,
+                fd,
+                path,
+                llen,
+                no_expand_uses,
+                metric=metric)
     print('In Print node', metric)
 
 def unexpand_uses(i_children):
